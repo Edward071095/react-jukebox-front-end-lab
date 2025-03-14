@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import "./App.css";
 import * as trackService from './services/trackService';
 import TrackList from './components/TrackList/TrackList';
+import NowPlaying from './components/NowPlaying/NowPlaying';
 import TrackDetail from './components/TrackDetail/TrackDetail';
 import TrackForm from './components/TrackForm/TrackForm';
 
@@ -9,13 +11,14 @@ const App = () => {
   const [tracks, setTracks] = useState([]);
   const [selected, setSelected] = useState(null)
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [currentTrack, setCurrentTrack] = useState(null);
 
   useEffect(() => {
     const fetchTracks = async () => {
         try {
           const fetchedTracks = await trackService.index();
 
-          if (fetchTracks.err) {
+          if (fetchedTracks.err) {
             throw new Error(fetchedTracks.err);
           }
 
@@ -87,6 +90,11 @@ const App = () => {
     }
   };
 
+  const handlePlay = (track) => {
+    setCurrentTrack(track);
+  };
+
+
 
   return (
     <>
@@ -95,7 +103,11 @@ const App = () => {
       handleSelect={handleSelect}
       handleFormView={handleFormView}
       isFormOpen={isFormOpen}
+      handlePlay={handlePlay}
      /> 
+
+      {currentTrack && <NowPlaying track={currentTrack} />}
+
       {isFormOpen ? ( 
        <TrackForm 
           handleAddTrack={handleAddTrack} 

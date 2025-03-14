@@ -1,4 +1,14 @@
+import React, { useState } from "react";
+import NowPlaying from "../NowPlaying/NowPlaying";
+
 const TrackList = (props) => {
+  const [currentTrack, setCurrentTrack] = useState(null);
+
+  const handlePlay = (track) => {
+    setCurrentTrack(track);
+  };
+
+
 
     return (
        <div>
@@ -15,11 +25,29 @@ const TrackList = (props) => {
                 onClick={() => props.handleSelect(track)}
               >
                   {track.title}
+                  <button 
+                  onClick={() => handlePlay(track)}
+                  style={{
+                    marginTop: "5px",
+                    backgroundColor: "#646CFF",
+                    color: "white",
+                    border: "none",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Play
+                  </button>
                 </li>
              ))}
            </ul>
             )}
         </div>
+
+      {currentTrack && <NowPlaying track={currentTrack} />}
+
+
         <button onClick={props.handleFormView}>
             {props.isFormOpen ? 'Close Form' : 'New Track'}
         </button>
